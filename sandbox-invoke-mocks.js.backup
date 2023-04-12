@@ -1,0 +1,12 @@
+module.exports = {
+  events: {
+    notification: {
+      handler: {
+        noteID: "abcde",
+        title: "a title",
+        body: "a body",
+        likes: 11,
+      },
+    },
+  },
+};

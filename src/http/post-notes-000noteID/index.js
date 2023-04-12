@@ -1,20 +1,16 @@
-let arc = require('@architect/functions')
-let requireLogin = require('@architect/shared/require-login')
+const arc = require("@architect/functions");
 
-exports.handler = arc.http.async(requireLogin, edit)
+exports.handler = arc.http.async(edit);
 
-async function edit (req) {
-
+async function edit(req) {
   // get the note (including title, body and noteID) from the form post
-  let note = req.body
-  note.email = req.session.person.email
+  const note = req.body;
 
   // save the updated note
-  let data = await arc.tables() 
-  await data.notes.put(note)
+  const data = await arc.tables();
+  await data.notes.put(note);
 
   return {
-    location: '/notes'
-  }
+    location: "/notes",
+  };
 }
-

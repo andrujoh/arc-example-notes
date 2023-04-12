@@ -1,18 +1,15 @@
-let arc = require('@architect/functions')
-let layout = require('@architect/shared/layout')
-let requireLogin = require('@architect/shared/require-login')
+const arc = require("@architect/functions");
+const layout = require("@architect/shared/layout");
 
-exports.handler = arc.http.async(requireLogin, showNote)
+exports.handler = arc.http.async(showNote);
 
 // display a note
-async function showNote (req) {
+async function showNote(req) {
+  const noteID = req.params.noteID;
+  const data = await arc.tables();
+  const note = await data.notes.get({ noteID });
 
-  let noteID = req.params.noteID
-  let email = req.session.person && req.session.person.email
-  let data = await arc.tables()
-  let note = await data.notes.get({noteID, email})
-
-  let html = `
+  const html = `
     <article>
       <h2>Edit note</h2>
       <form action=/notes/${noteID} method=post>
@@ -39,9 +36,9 @@ async function showNote (req) {
         <button class="danger" type=submit>Delete</button>
       </form>
     </article>
-  `
+  `;
 
   return {
-    html: layout({contents: html})
-  }
+    html: layout({ contents: html }),
+  };
 }

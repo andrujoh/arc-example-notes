@@ -1,15 +1,13 @@
-let arc = require('@architect/functions')
-let requireLogin = require('@architect/shared/require-login')
+const arc = require("@architect/functions");
 
-exports.handler = arc.http.async(requireLogin, deleteNote)
+exports.handler = arc.http.async(deleteNote);
 
-async function deleteNote (req) {
-  let data = await arc.tables()
+async function deleteNote(req) {
+  const data = await arc.tables();
   await data.notes.delete({
     noteID: req.params.noteID,
-    email: req.session.person.email
-  })
+  });
   return {
-    location: '/notes'
-  }
+    location: "/notes",
+  };
 }

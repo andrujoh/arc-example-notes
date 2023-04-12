@@ -1,39 +1,46 @@
-let arc = require('@architect/functions')
-let layout = require('@architect/shared/layout')
-let requireLogin = require('@architect/shared/require-login')
-let getNotes = require('./get-notes.js')
+const arc = require("@architect/functions");
+const layout = require("@architect/shared/layout");
+const getNotes = require("./get-notes.js");
 
-exports.handler = arc.http.async(requireLogin, showProtectedPage)
+exports.handler = arc.http.async(showProtectedPage);
 
 // display all notes
-async function showProtectedPage (req) {
+async function showProtectedPage(req) {
+  const { notes, mostLikedNote } = await getNotes();
 
-  let person = req.session.person
-  let notes = await getNotes(person.email)
-
-  let greeting = `You don't have any notes! Make some below`
+  let greeting = `There are no notes! Make some below`;
   if (notes.length) {
-    greeting = `You have <strong>${notes.length}</strong> notes.`
+    greeting = `There are <strong>${notes.length}</strong> notes.`;
   }
 
-  let list = notes.map(note=> {
+  const list = notes.map(note => {
     return `
-      <section class="card">
-        <a href=/notes/${note.noteID}>        
-          <heading>
-            ${note.title}
-          </heading>        
-          <p>${note.body}</p>
-        </a>
-      </section>`
-  })
+      <section class="card ${mostLikedNote.noteID === note.noteID ? "mostLiked" : ""}">
+        <div style="display: flex; justify-content: space-between;">
+          <a href=/notes/${note.noteID}>
+            <heading>
+              ${note.title}
+            </heading>
+            <p>${note.body}</p>
+          </a>
+          <form style="display: flex; justify-content: flex-end; width: 30px;" action=/likes method=post>
+            <p>Likes:&nbsp;${note.likes ?? "0"}</p>
+            <input name="noteID" type="hidden" value=${note.noteID}>
+            <button id="note:${note.noteID}" class="likebutton" type=submit>
+              <img src=/_static/images/like-icon.svg>
+            </button>
+          </form>
+        </div>
+        </section>
+      `;
+  });
 
-  var contents = `
+  const contents = `
     <section>
-      <h2>Welcome to the Notes page <strong>${person.email}</strong>!</h2>
+      <h2>Welcome to the Notes page!</h2>
       <p>${greeting}</p>
       <section class="cards">
-        ${list.join('')}
+        ${list.join("")}
       </section>
       <form action=/notes method=post>
         <h2>Make a note</h2>
@@ -48,10 +55,9 @@ async function showProtectedPage (req) {
         <button>Make a note</button>
       </form>
     </section>
-  `
+  `;
 
   return {
     html: layout({ contents }),
-  }
+  };
 }
-

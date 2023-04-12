@@ -1,20 +1,22 @@
-let arc = require('@architect/functions')
-let requireLogin = require('@architect/shared/require-login')
-let save = require('./save')
+const arc = require("@architect/functions");
+const save = require("./save");
+const sanitizeHtml = require("sanitize-html");
 
-exports.handler = arc.http.async(requireLogin, create)
+exports.handler = arc.http.async(create);
 
-async function create (req) {
-
+async function create(req) {
   // create the partition and sort keys
-  let email = req.session.person.email
-  let title = req.body.title
-  let body = req.body.body
+  const title = sanitizeHtml(req.body.title);
+  const body = sanitizeHtml(req.body.body);
 
   // save the note
-  await save({email, title, body})
+  try {
+    await save({ title, body });
+  } catch (error) {
+    console.log(`Got an error`, error);
+  }
 
   return {
-    location: '/notes'
-  }
+    location: "/notes",
+  };
 }

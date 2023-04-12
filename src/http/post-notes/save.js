@@ -1,13 +1,14 @@
-let arc = require('@architect/functions')
-let Hashids = require('hashids')
-let hashids = new Hashids()
+const arc = require("@architect/functions");
+const Hashids = require("hashids");
+const hashids = new Hashids();
 
-module.exports = async function save ({email, title, body}) {
-  let data = await arc.tables()
+module.exports = async function save({ title, body }) {
+  if (!title.trim() || !body.trim()) throw new Error("Missing fields");
+
+  const data = await arc.tables();
   return data.notes.put({
-    email,
     title,
     body,
-    noteID: hashids.encode(Date.now())
-  })
-}
+    noteID: hashids.encode(Date.now()),
+  });
+};

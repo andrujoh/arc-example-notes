@@ -1,43 +1,28 @@
-let arc = require('@architect/functions')
-let static = arc.http.helpers.static
+const arc = require("@architect/functions");
+const static = arc.http.helpers.static;
 
-module.exports = function layout ({ contents, showNav=true, isLoggedIn=true }) {
-  var nav = ''
-
-  var navLinks = `
-		<a class="button subtle" href=/login>Log in</a>
-		<a class="button" href=/signup>Sign up</a>
-	`
-  if (isLoggedIn) {
-    navLinks = `
-			<a class="button subtle" href=/logout>Log out</a>
-		`
-  }
-
-  if (showNav) {
-    nav = `
+module.exports = function layout({ contents }) {
+  const nav = `
 			<nav>
 				<a href="/">
-					<img class="logo" src="${static('/images/logo.svg')}"/>
+					<img class="logo" src="${static("/images/logo.svg")}"/>
 				</a>
 				<a href="https://arc.codes" target="_blank">Documentation</a>
-				${navLinks}
-			</nav>`
-  }
+			</nav>`;
 
   return `<!DOCTYPE html>
 	<html>
 	<head>
 		<title>Architect demo app</title>
-		<link rel=stylesheet href="${static('/css/style.css')}">
-		<link rel="icon" type="image/png" sizes="16x16" href="${static('/images/architect-favicon-16.png')}">
-		<link rel="icon" type="image/png" sizes="32x32" href="${static('/images/architect-favicon-32.png')}">
-		<link rel="icon" type="image/png" sizes="64x64" href="${static('/images/architect-favicon-64.png')}">
+		<link rel=stylesheet href="${static("/css/style.css")}">
+		<link rel="icon" type="image/png" sizes="16x16" href="${static("/images/architect-favicon-16.png")}">
+		<link rel="icon" type="image/png" sizes="32x32" href="${static("/images/architect-favicon-32.png")}">
+		<link rel="icon" type="image/png" sizes="64x64" href="${static("/images/architect-favicon-64.png")}">
 	</head>
 	<body>	
 		${nav}
 		<body>
 			${contents}
 		</body>
-	</html>`
-}
+	</html>`;
+};
