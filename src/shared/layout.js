@@ -7,7 +7,7 @@ module.exports = function layout({ contents }) {
 				<a href="/">
 					<img class="logo" src="${static("/images/logo.svg")}"/>
 				</a>
-				<a href="https://arc.codes" target="_blank">Documentation</a>
+				<a style="font-size: 0.8rem;" href="https://arc.codes" target="_blank">Documentation</a>
 			</nav>`;
 
   return `<!DOCTYPE html>

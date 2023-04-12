@@ -45,7 +45,7 @@ async function showProtectedPage(req) {
       <form action=/notes method=post>
         <h2>Make a note</h2>
         <div class="input-and-label">
-          <input name="title" required="required" type="text" autocomplete="off" value="" placeholder="Title" autofocus/>
+          <input name="title" required="required" type="text" autocomplete="off" value="" placeholder="Title"/>
           <label for="email">Title</label>
         </div>
         <div class="input-and-label">
